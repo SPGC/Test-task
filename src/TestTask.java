@@ -23,5 +23,7 @@ public class TestTask {
             timer = System.currentTimeMillis() - timer;
             System.out.println("Reading time of 1 MB of data is " + timer + " milliseconds\n");
         }
+        File file = new File("IO.txt");
+        file.delete();
     }
 }
