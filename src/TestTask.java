@@ -1,29 +1,63 @@
 import java.io.*;
 import java.lang.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class TestTask {
     public static void main(String[] args) throws IOException {
-        final int AMOUNT_OF_DATA = 1024 * 1024;
-        for (int k = 0; k < 5; k++) {
-            FileOutputStream writer = new FileOutputStream("IO.txt");
-            Long timer;
-            timer = System.currentTimeMillis();
-            for (int i = 0; i < AMOUNT_OF_DATA; i++) {
-                writer.write('a');
+        Scanner in = new Scanner(System.in);
+        final int MODE = in.nextInt();
+        final int AMOUNT_OF_DATA = in.nextInt();
+        final int AMOUNT_OF_TESTS = 5;
+        Long averageReading = 0L;
+        Long averageWriting = 0L;
+        Long timer;
+        FileOutputStream writer;
+        FileInputStream reader;
+        if (MODE == 1) {
+            for (int k = 0; k < AMOUNT_OF_TESTS; k++) {
+                writer = new FileOutputStream("IO.txt");
+                for (int i = 0; i < AMOUNT_OF_DATA; i++) {
+                    timer = System.currentTimeMillis();
+                    writer.write('a');
+                    averageWriting += System.currentTimeMillis() - timer;
+                }
+                writer.close();
+                reader = new FileInputStream("IO.txt");
+                for (int i = 0; i < AMOUNT_OF_DATA; i++) {
+                    timer = System.currentTimeMillis();
+                    reader.read();
+                    averageReading += System.currentTimeMillis() - timer;
+                }
+                reader.close();
             }
-            writer.close();
-            timer = System.currentTimeMillis() - timer;
-            System.out.println("Writing time of 1 MB of data is " + timer + " milliseconds");
-            FileInputStream reader = new FileInputStream("IO.txt");
-            timer = System.currentTimeMillis();
-            for (int i = 0; i < AMOUNT_OF_DATA; i++) {
-                reader.read();
+            System.out.println("Average writing time of " + AMOUNT_OF_DATA + " bytes byte by byte is " + averageWriting / AMOUNT_OF_TESTS + " milliseconds");
+            System.out.println("Average reading time of " + AMOUNT_OF_DATA + " bytes byte by byte is " + averageReading / AMOUNT_OF_TESTS + " milliseconds\n");
+            File file = new File("IO.txt");
+            file.delete();
+        } else if(MODE == 2) {
+            averageReading = 0L;
+            averageWriting = 0L;
+            byte[] bytes = new byte[AMOUNT_OF_DATA];
+            for (int i = 0; i < AMOUNT_OF_TESTS; i++) {
+                Arrays.fill(bytes, (byte) 'a');
+                writer = new FileOutputStream("IO.txt");
+                timer = System.currentTimeMillis();
+                writer.write(bytes);
+                writer.close();
+                averageWriting += System.currentTimeMillis() - timer;
+                reader = new FileInputStream("IO.txt");
+                timer = System.currentTimeMillis();
+                reader.read(bytes);
+                reader.close();
+                averageReading += System.currentTimeMillis() - timer;
             }
-            reader.close();
-            timer = System.currentTimeMillis() - timer;
-            System.out.println("Reading time of 1 MB of data is " + timer + " milliseconds\n");
+            System.out.println("Average writing time of " + AMOUNT_OF_DATA + " bytes is " + averageWriting / AMOUNT_OF_TESTS + " milliseconds");
+            System.out.println("Average reading time of " + AMOUNT_OF_DATA + " bytes is " + averageReading / AMOUNT_OF_TESTS + " milliseconds");
+            File file = new File("IO.txt");
+            file.delete();
+        } else {
+            System.out.println("Wrong input");
         }
-        File file = new File("IO.txt");
-        file.delete();
     }
 }
