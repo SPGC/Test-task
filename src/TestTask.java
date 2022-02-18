@@ -18,21 +18,21 @@ public class TestTask {
             for (int k = 0; k < AMOUNT_OF_TESTS; k++) {
                 writer = new FileOutputStream("IO.txt");
                 for (int i = 0; i < AMOUNT_OF_DATA; i++) {
-                    timer = System.currentTimeMillis();
+                    timer = System.nanoTime();
                     writer.write('a');
-                    averageWriting += System.currentTimeMillis() - timer;
+                    averageWriting += System.nanoTime() - timer;
                 }
                 writer.close();
                 reader = new FileInputStream("IO.txt");
                 for (int i = 0; i < AMOUNT_OF_DATA; i++) {
-                    timer = System.currentTimeMillis();
+                    timer = System.nanoTime();
                     reader.read();
-                    averageReading += System.currentTimeMillis() - timer;
+                    averageReading += System.nanoTime() - timer;
                 }
                 reader.close();
             }
-            System.out.println("Average writing time of " + AMOUNT_OF_DATA + " bytes byte by byte is " + averageWriting / AMOUNT_OF_TESTS + " milliseconds");
-            System.out.println("Average reading time of " + AMOUNT_OF_DATA + " bytes byte by byte is " + averageReading / AMOUNT_OF_TESTS + " milliseconds\n");
+            System.out.println("Average writing time of " + AMOUNT_OF_DATA + " bytes byte by byte is " + averageWriting / AMOUNT_OF_TESTS + " nanoseconds");
+            System.out.println("Average reading time of " + AMOUNT_OF_DATA + " bytes byte by byte is " + averageReading / AMOUNT_OF_TESTS + " nanoseconds\n");
             File file = new File("IO.txt");
             file.delete();
         } else if(MODE == 2) {
